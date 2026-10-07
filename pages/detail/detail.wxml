@@ -1,0 +1,229 @@
+<view class="page" wx:if="{{trip}}">
+
+  <view class="body page-in">
+
+    <view class="hero">
+      <view class="island">
+        <text class="island-point">{{trip.from}}</text>
+        <view class="route-arrow">
+          <view class="route-arrow-bar"></view>
+          <view class="route-arrow-tip"></view>
+        </view>
+        <text class="island-point">{{trip.to}}</text>
+      </view>
+      <view class="hero-foot">
+        <text class="hero-time">{{trip.dateLabel}} · {{trip.time}} 出发</text>
+        <text class="pill pill-warn" wx:if="{{trip.far}}">{{trip.farText}}</text>
+        <text class="pill pill-off" wx:if="{{trip.expired}}">已结束</text>
+        <text class="pill pill-warn" wx:elif="{{trip.full}}">已满员</text>
+      </view>
+    </view>
+
+    <view class="group">
+      <view class="row">
+        <text class="row-k">出发地</text>
+        <text class="row-v">{{trip.from}}</text>
+      </view>
+      <view class="row">
+        <text class="row-k">目的地</text>
+        <text class="row-v">{{trip.to}}</text>
+      </view>
+      <view class="row">
+        <text class="row-k">出发时间</text>
+        <text class="row-v">{{trip.dateLabel}} {{trip.time}}</text>
+      </view>
+      <view class="row">
+        <text class="row-k">剩余座位</text>
+        <text class="row-v {{trip.full ? 'full-v' : ''}}">{{trip.expired ? '行程已结束' : (trip.full ? '已满员' : trip.seatsLeft + ' 座（共 ' + trip.seats + ' 座）')}}</text>
+      </view>
+      <view class="row">
+        <text class="row-k">车上人数</text>
+        <text class="row-v">{{trip.genderText || '暂无'}}</text>
+      </view>
+      <view class="row" wx:if="{{trip.genderLimitText}}">
+        <text class="row-k">性别要求</text>
+        <text class="row-v limit-v">{{trip.genderLimitText}}</text>
+      </view>
+      <view class="row">
+        <text class="row-k">总价</text>
+        <text class="row-v">{{trip.totalText}}</text>
+      </view>
+      <view class="row">
+        <text class="row-k">人均</text>
+        <text class="row-v per-v">{{trip.perText}}</text>
+      </view>
+      <view class="row row-last">
+        <text class="row-k">备注</text>
+        <text class="row-v">{{trip.note}}</text>
+      </view>
+    </view>
+
+    <view class="group">
+      <view class="row row-last">
+        <text class="row-k">发布人</text>
+        <view class="row-v owner-line">
+          <text>{{trip.owner}}</text>
+          <text class="tag" wx:if="{{trip.verified}}">已认证</text>
+        </view>
+      </view>
+    </view>
+
+    <view class="group" wx:if="{{!trip.mine}}">
+      <view class="row" hover-class="hv-row" hover-start-time="0" hover-stay-time="100" bindtap="onReport">
+        <text class="row-k">举报该行程</text>
+        <text class="row-v">›</text>
+      </view>
+      <view class="row row-last" hover-class="hv-row" hover-start-time="0" hover-stay-time="100" bindtap="onBlock">
+        <text class="row-k">拉黑发布人</text>
+        <text class="row-v">›</text>
+      </view>
+    </view>
+
+    <block wx:if="{{trip.mine}}">
+      <view class="group-title">上车申请（{{pendingCount}} 待处理）</view>
+      <view class="group" wx:if="{{joins.length > 0}}">
+        <view
+          class="row {{index === joins.length - 1 ? 'row-last' : ''}}"
+          wx:for="{{joins}}"
+          wx:key="id"
+        >
+          <view class="row-k apply-cell">
+            <view class="apply-name">{{item.name}} · {{item.genderText}}</view>
+            <view class="apply-sub">{{item.statusText}}</view>
+          </view>
+          <view class="apply-ops" wx:if="{{item.status === 'pending'}}">
+            <view class="op op-no" hover-class="hv-scale" hover-start-time="0" hover-stay-time="100" catchtap="onReject" data-id="{{item.id}}">拒绝</view>
+            <view class="op op-yes" hover-class="hv-scale" hover-start-time="0" hover-stay-time="100" catchtap="onApprove" data-id="{{item.id}}">同意</view>
+          </view>
+        </view>
+      </view>
+      <view class="group" wx:else>
+        <view class="row row-last">
+          <text class="row-v empty-v">还没有人申请</text>
+        </view>
+      </view>
+    </block>
+
+    <view class="tips">
+      <view class="tips-title">安全提示</view>
+      <view class="tips-item">出发前核对对方身份，建议结伴出行</view>
+      <view class="tips-item">费用由同乘人自行协商分摊，平台不经手</view>
+      <view class="tips-item">平台仅提供信息对接，不收取任何费用</view>
+    </view>
+
+  </view>
+
+  <view class="bar">
+    <block wx:if="{{trip.mine}}">
+      <button class="btn btn-danger" bindtap="onDelete">删除行程</button>
+    </block>
+    <block wx:elif="{{trip.expired}}">
+      <button class="btn btn-done" disabled>该行程已结束</button>
+    </block>
+    <block wx:elif="{{myJoinStatus === 'approved'}}">
+      <button class="btn btn-done" disabled>已同意，等待出发</button>
+    </block>
+    <block wx:elif="{{myJoinStatus === 'pending'}}">
+      <button class="btn btn-ghost" bindtap="onCancelJoin">撤回申请</button>
+    </block>
+    <block wx:elif="{{trip.full}}">
+      <button class="btn btn-done" disabled>已满员</button>
+    </block>
+    <block wx:elif="{{genderBlocked}}">
+      <button class="btn btn-done" disabled>{{trip.genderLimitText}}，你暂时不能申请</button>
+    </block>
+    <block wx:else>
+      <button class="btn" bindtap="onApply">申请加入</button>
+    </block>
+  </view>
+
+  <view class="mask {{reportClosing ? 'mask-out' : ''}}" wx:if="{{reporting}}" catchtap="onReportCancel" catchtouchmove="noop">
+    <view class="dialog {{reportClosing ? 'dialog-out' : ''}}" catchtap="noop">
+      <view class="dialog-title">举报该行程</view>
+      <view class="dialog-sub">请选择举报原因</view>
+
+      <view class="reason-grid">
+        <view
+          class="reason-chip {{item === reportReason ? 'reason-chip-on' : ''}}"
+          wx:for="{{reportReasons}}"
+          wx:key="*this"
+          data-reason="{{item}}"
+          hover-class="hv-scale"
+          hover-start-time="0"
+          hover-stay-time="100"
+          catchtap="onReportReason"
+        >{{item}}</view>
+      </view>
+
+      <textarea
+        class="dialog-textarea"
+        placeholder="补充说明（选填），如：司机临时加价"
+        placeholder-class="dialog-ph"
+        value="{{reportDetail}}"
+        maxlength="200"
+        auto-height
+        cursor-spacing="40"
+        bindinput="onReportDetailInput"
+      />
+
+      <view class="dialog-note">举报会提交到平台后台人工核实，不会通知对方。</view>
+
+      <view class="dialog-ops">
+        <view class="dialog-btn dialog-cancel" hover-class="hv-dim" hover-start-time="0" hover-stay-time="100" catchtap="onReportCancel">取消</view>
+        <view
+          class="dialog-btn dialog-primary {{reportingSubmit ? 'dialog-disabled' : ''}}"
+          hover-class="hv-dim"
+          hover-start-time="0"
+          hover-stay-time="100"
+          catchtap="onReportConfirm"
+        >{{reportingSubmit ? '提交中…' : '提交举报'}}</view>
+      </view>
+    </view>
+  </view>
+
+  <view class="mask {{blockClosing ? 'mask-out' : ''}}" wx:if="{{blocking}}" catchtap="onBlockCancel" catchtouchmove="noop">
+    <view class="dialog {{blockClosing ? 'dialog-out' : ''}}" catchtap="noop">
+      <view class="dialog-title">拉黑发布人</view>
+
+      <view class="dialog-text">
+        <view class="dialog-line">拉黑后，你们互相看不到对方发布的行程</view>
+        <view class="dialog-line">对方也不能再申请你发布的车</view>
+        <view class="dialog-line">可以随时在「我的 - 黑名单」里解除</view>
+      </view>
+
+      <view class="dialog-note">拉黑只影响你们之间的互相可见，不会通知对方。</view>
+
+      <input
+        class="dialog-input"
+        placeholder="备注（选填），如：同班同学、发过假消息"
+        placeholder-class="dialog-ph"
+        value="{{blockRemark}}"
+        maxlength="20"
+        cursor-spacing="40"
+        bindinput="onBlockRemarkInput"
+      />
+
+      <view class="dialog-ops">
+        <view class="dialog-btn dialog-cancel" hover-class="hv-dim" hover-start-time="0" hover-stay-time="100" catchtap="onBlockCancel">取消</view>
+        <view
+          class="dialog-btn dialog-danger {{blockingSubmit ? 'dialog-disabled' : ''}}"
+          hover-class="hv-dim"
+          hover-start-time="0"
+          hover-stay-time="100"
+          catchtap="onBlockConfirm"
+        >{{blockingSubmit ? '处理中…' : '拉黑'}}</view>
+      </view>
+    </view>
+  </view>
+
+</view>
+
+<view class="page" wx:elif="{{ready && !loggedIn}}">
+  <view class="body page-in">
+    <view class="gate">
+      <view class="gate-title">登录后查看行程详情</view>
+      <view class="gate-desc">拼车行程仅对已登录的同学开放，这样双方都能确认对方是本校同学。登录只需要填一个姓，其他同学只会看到「林同学」这样的称呼。</view>
+      <button class="btn" bindtap="onGoLogin">去登录</button>
+    </view>
+  </view>
+</view>

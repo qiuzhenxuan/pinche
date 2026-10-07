@@ -1,0 +1,121 @@
+.page {
+  min-height: 100vh;
+  background: #F2F2F7;
+}
+
+.body {
+  padding: 16px 0 40px;
+}
+
+.hint {
+  margin: 0 16px 16px;
+  padding: 12px 14px;
+  font-size: 13px;
+  line-height: 1.7;
+  color: #8A6A33;
+  background: rgba(255, 149, 0, 0.08);
+  border-radius: 12px;
+}
+
+.user-cell {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  flex: 1;
+  min-width: 0;
+  margin-right: 12px;
+}
+
+.user-line {
+  display: flex;
+  align-items: center;
+  max-width: 100%;
+  min-width: 0;
+}
+
+.user-name {
+  font-size: 16px;
+  color: #000000;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* 账号标识：与拼车页「几男几女」同款胶囊 */
+.uid-pill {
+  display: inline-flex;
+  align-items: center;
+  flex-shrink: 0;
+  height: 18px;
+  margin-left: 6px;
+  padding: 0 8px;
+  font-size: 11px;
+  line-height: 1;
+  color: #8E8E93;
+  background: rgba(120, 120, 128, 0.12);
+  border-radius: 4px;
+}
+
+.user-sub {
+  max-width: 100%;
+  margin-top: 4px;
+  font-size: 12px;
+  line-height: 16px;
+  color: #8E8E93;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.op {
+  min-width: 60px;
+  height: 32px;
+  line-height: 32px;
+  text-align: center;
+  font-size: 14px;
+  border-radius: 8px;
+  color: #FF3B30;
+  background: rgba(255, 59, 48, 0.1);
+  flex-shrink: 0;
+  transition: opacity 160ms ease-out;
+}
+
+.empty-v {
+  text-align: center;
+  color: #C7C7CC;
+}
+
+/* ---------------- 深色模式 ---------------- */
+@media (prefers-color-scheme: dark) {
+  .page {
+    background: #000000;
+  }
+
+  .hint {
+    color: #D9A05B;
+    background: rgba(255, 149, 0, 0.14);
+  }
+
+  .user-name {
+    color: #FFFFFF;
+  }
+
+  .uid-pill {
+    color: #98989E;
+    background: rgba(120, 120, 128, 0.24);
+  }
+
+  .user-sub {
+    color: #98989E;
+  }
+
+  .op {
+    color: #FF6961;
+    background: rgba(255, 59, 48, 0.18);
+  }
+
+  .empty-v {
+    color: #6C6C70;
+  }
+}

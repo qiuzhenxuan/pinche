@@ -1,0 +1,271 @@
+.page {
+  min-height: 100vh;
+}
+
+.body {
+  padding: 24px 0 40px;
+}
+
+/* 头像选择 */
+.hero {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 12px 16px 28px;
+}
+
+/* 视觉层刻意放在 button 外面：微信 button 自带 overflow:hidden、padding 和 ::after，
+   套在里面会把圆环裁掉一块，所以改成透明 button 绝对定位盖在上面 */
+.avatar-wrap {
+  position: relative;
+  width: 88px;
+  height: 88px;
+}
+
+.avatar-hit {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 88px;
+  height: 88px;
+  padding: 0;
+  margin: 0;
+  border: none;
+  border-radius: 50%;
+  background: transparent;
+  line-height: 1;
+}
+
+.avatar-hit::after {
+  border: none;
+}
+
+.avatar-img {
+  width: 88px;
+  height: 88px;
+  border-radius: 50%;
+  display: block;
+}
+
+/* 圆环用内联 SVG 背景画，不用 border-style: dashed：
+   圆形上的虚线边框在 Chromium 里按键长分配，曲率大的地方会丢段，圆环就缺一半 */
+.avatar-ph {
+  width: 88px;
+  height: 88px;
+  border-radius: 50%;
+  background-color: #FFFFFF;
+  background-image: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI4OCIgaGVpZ2h0PSI4OCIgdmlld0JveD0iMCAwIDg4IDg4Ij48Y2lyY2xlIGN4PSI0NCIgY3k9IjQ0IiByPSI0MyIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjM0MzQzQzIiBzdHJva2Utb3BhY2l0eT0iMC4zIiBzdHJva2Utd2lkdGg9IjEiIHN0cm9rZS1kYXNoYXJyYXk9IjUgNSIvPjwvc3ZnPg==");
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 88px 88px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.avatar-plus {
+  font-size: 32px;
+  font-weight: 300;
+  color: #007AFF;
+  line-height: 1;
+}
+
+.hero-title {
+  margin-top: 12px;
+  font-size: 16px;
+  font-weight: 600;
+  color: #000000;
+}
+
+.hero-tip {
+  margin-top: 6px;
+  font-size: 13px;
+  color: #8E8E93;
+  text-align: center;
+}
+
+/* 姓 输入 */
+.row-input {
+  flex: 1;
+  min-width: 0;
+  font-size: 16px;
+  color: #000000;
+  text-align: right;
+}
+
+.ph {
+  color: #C7C7CC;
+}
+
+/* 性别分段控件：两段并排，选中段浮白 */
+.seg {
+  display: flex;
+  flex-shrink: 0;
+  padding: 2px;
+  border-radius: 9px;
+  background: rgba(120, 120, 128, 0.12);
+}
+
+.seg-item {
+  min-width: 52px;
+  height: 30px;
+  line-height: 30px;
+  text-align: center;
+  font-size: 15px;
+  color: #000000;
+  border-radius: 7px;
+  transition: background-color 200ms cubic-bezier(0.32, 0.72, 0, 1);
+}
+
+.seg-on {
+  background: #FFFFFF;
+  font-weight: 600;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
+}
+
+/* 认证锁定时右侧只读文案 */
+.lock-v {
+  font-size: 15px;
+}
+
+/* 你好 X 同学 —— 与下方提示同款排版，姓氏用蓝色放大强调 */
+.greet {
+  display: flex;
+  align-items: center;
+  padding: 0 20px 6px;
+  font-size: 13px;
+  line-height: 1.5;
+  color: #8E8E93;
+}
+
+.greet-word {
+  line-height: 20px;
+}
+
+.greet-name {
+  padding: 0 1px;
+  font-size: 15px;
+  font-weight: 600;
+  color: #007AFF;
+  line-height: 20px;
+}
+
+/* 未填姓时的待输入光标：灰点占位 */
+.caret {
+  width: 3px;
+  height: 13px;
+  margin: 0 2px;
+  border-radius: 1.5px;
+  background: #C7C7CC;
+  flex-shrink: 0;
+  animation: caret-blink 1s step-end infinite;
+}
+
+@keyframes caret-blink {
+  0% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+.hint {
+  padding: 0 20px 20px;
+  font-size: 13px;
+  line-height: 1.5;
+  color: #8E8E93;
+}
+
+/* 未填姓时的提示占位：整体转浅灰 */
+.hint-off {
+  color: #C7C7CC;
+}
+
+/* 性别说明行：紧跟分组卡片，上间距收紧一点（必须写在 .hint 之后才生效） */
+.hint-gender {
+  padding: 0 20px 16px;
+}
+
+.actions {
+  padding: 0 16px;
+}
+
+.btn-off {
+  background: #C7C7CC;
+  color: #FFFFFF;
+}
+
+.foot-tip {
+  margin-top: 24px;
+  padding: 0 20px;
+  font-size: 12px;
+  line-height: 1.7;
+  color: #8E8E93;
+  text-align: center;
+}
+
+/* ---------------- 深色模式 ---------------- */
+@media (prefers-color-scheme: dark) {
+  .avatar-ph {
+    background-color: #1C1C1E;
+    background-image: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI4OCIgaGVpZ2h0PSI4OCIgdmlld0JveD0iMCAwIDg4IDg4Ij48Y2lyY2xlIGN4PSI0NCIgY3k9IjQ0IiByPSI0MyIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjRkZGRkZGIiBzdHJva2Utb3BhY2l0eT0iMC4yNCIgc3Ryb2tlLXdpZHRoPSIxIiBzdHJva2UtZGFzaGFycmF5PSI1IDUiLz48L3N2Zz4=");
+  }
+
+  .avatar-plus {
+    color: #0A84FF;
+  }
+
+  .hero-title {
+    color: #FFFFFF;
+  }
+
+  .row-input {
+    color: #FFFFFF;
+  }
+
+  .greet-name {
+    color: #0A84FF;
+  }
+
+  .caret {
+    background: #48484A;
+  }
+
+  .hint-off {
+    color: #48484A;
+  }
+
+  .ph {
+    color: #48484A;
+  }
+
+  .btn-off {
+    background: #3A3A3C;
+    color: #8E8E93;
+  }
+
+  .seg {
+    background: rgba(120, 120, 128, 0.24);
+  }
+
+  .seg-item {
+    color: #FFFFFF;
+  }
+
+  .seg-on {
+    background: #48484A;
+    box-shadow: none;
+  }
+}
+
+/* ---------------- 降低动效 ----------------
+   光标闪烁属于持续的视觉振荡，开启「减弱动态效果」时停掉，改为常亮 */
+@media (prefers-reduced-motion: reduce) {
+  .caret {
+    animation: none;
+  }
+}

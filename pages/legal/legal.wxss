@@ -1,0 +1,84 @@
+.page {
+  min-height: 100vh;
+  background: #F2F2F7;
+}
+
+.body {
+  padding: 20px 16px 40px;
+}
+
+.head {
+  margin-bottom: 16px;
+}
+
+.doc-title {
+  font-size: 22px;
+  font-weight: 700;
+  color: #000000;
+}
+
+.doc-updated {
+  font-size: 13px;
+  color: #8E8E93;
+  margin-top: 6px;
+}
+
+.intro {
+  font-size: 14px;
+  color: #6C6C70;
+  line-height: 1.8;
+  padding: 14px 16px;
+  background: rgba(120, 120, 128, 0.08);
+  border-radius: 12px;
+  margin-bottom: 8px;
+}
+
+.sec {
+  padding: 16px 0 4px;
+}
+
+.sec-h {
+  font-size: 16px;
+  font-weight: 600;
+  color: #000000;
+  margin-bottom: 8px;
+}
+
+.sec-p {
+  font-size: 15px;
+  color: #3A3A3C;
+  line-height: 1.9;
+  margin-bottom: 8px;
+}
+
+.foot-tip {
+  text-align: center;
+  font-size: 12px;
+  color: #C7C7CC;
+  padding: 24px 0 8px;
+}
+
+/* ---------------- 深色模式 ---------------- */
+@media (prefers-color-scheme: dark) {
+  .page {
+    background: #000000;
+  }
+
+  .doc-title,
+  .sec-h {
+    color: #FFFFFF;
+  }
+
+  .intro {
+    background: rgba(120, 120, 128, 0.16);
+    color: #98989F;
+  }
+
+  .sec-p {
+    color: #D1D1D6;
+  }
+
+  .foot-tip {
+    color: #6C6C70;
+  }
+}

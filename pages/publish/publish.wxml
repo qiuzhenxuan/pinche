@@ -1,0 +1,150 @@
+<view class="page">
+
+  <view class="body page-in">
+
+    <block wx:if="{{needProfile}}">
+      <view class="gate">
+        <view class="gate-title">请先登录</view>
+        <view class="gate-desc">发布行程前需要登录并填一个姓，其他同学只会看到「林同学」这样的称呼，不会知道你的全名。</view>
+        <button class="btn" bindtap="onGoLogin">去登录</button>
+      </view>
+    </block>
+
+    <block wx:else>
+
+      <view class="fare-tip">
+        <view class="fare-tip-k">每人约需</view>
+        <view class="fare-tip-v">{{perText}}</view>
+        <view class="fare-tip-desc">总价按 {{seatIndex + 1}} 人平摊，车主不参与分摊</view>
+      </view>
+
+      <view class="group-title">行程信息</view>
+      <view class="place-tip" wx:if="{{!showHot}}">当前城市不在福州校区，常用站点不适用，出发地和目的地请手动填写</view>
+      <view class="group">
+
+        <view class="row {{showHot ? 'row-flush' : ''}}">
+          <text class="row-k">出发地</text>
+          <input
+            class="row-input"
+            placeholder="如：福州工商学院（南门）"
+            placeholder-class="pick-ph"
+            maxlength="20"
+            value="{{from}}"
+            data-field="from"
+            bindinput="onPlaceInput"
+          />
+        </view>
+        <view class="chips" wx:if="{{showHot}}">
+          <view
+            class="chip"
+            wx:for="{{hotPlaces}}"
+            wx:key="*this"
+            data-field="from"
+            data-name="{{item}}"
+            hover-class="hv-dim"
+            hover-start-time="0"
+            hover-stay-time="80"
+            bindtap="onPickPlace"
+          >{{item}}</view>
+        </view>
+
+        <view class="row {{showHot ? 'row-flush' : ''}}">
+          <text class="row-k">目的地</text>
+          <input
+            class="row-input"
+            placeholder="如：永泰站（动车站）"
+            placeholder-class="pick-ph"
+            maxlength="20"
+            value="{{to}}"
+            data-field="to"
+            bindinput="onPlaceInput"
+          />
+        </view>
+        <view class="chips" wx:if="{{showHot}}">
+          <view
+            class="chip"
+            wx:for="{{hotPlaces}}"
+            wx:key="*this"
+            data-field="to"
+            data-name="{{item}}"
+            hover-class="hv-dim"
+            hover-start-time="0"
+            hover-stay-time="80"
+            bindtap="onPickPlace"
+          >{{item}}</view>
+        </view>
+
+        <picker mode="date" value="{{date}}" start="{{minDate}}" end="{{maxDate}}" bindchange="onDateChange">
+          <view class="row" hover-class="hv-row" hover-start-time="0" hover-stay-time="80">
+            <text class="row-k">出发日期</text>
+            <view class="row-v pick">{{date}}<text class="chev">›</text></view>
+          </view>
+        </picker>
+
+        <picker mode="time" value="{{time}}" bindchange="onTimeChange">
+          <view class="row" hover-class="hv-row" hover-start-time="0" hover-stay-time="80">
+            <text class="row-k">出发时间</text>
+            <view class="row-v pick">{{time}}<text class="chev">›</text></view>
+          </view>
+        </picker>
+
+        <picker mode="selector" range="{{seatOptions}}" value="{{seatIndex}}" bindchange="onSeatChange">
+          <view class="row" hover-class="hv-row" hover-start-time="0" hover-stay-time="80">
+            <text class="row-k">可带人数</text>
+            <view class="row-v pick">{{seatOptions[seatIndex]}}<text class="chev">›</text></view>
+          </view>
+        </picker>
+
+        <picker mode="selector" range="{{genderLimitOptions}}" value="{{genderLimitIndex}}" bindchange="onGenderLimitChange">
+          <view class="row" hover-class="hv-row" hover-start-time="0" hover-stay-time="80">
+            <text class="row-k">性别要求</text>
+            <view class="row-v pick">{{genderLimitOptions[genderLimitIndex]}}<text class="chev">›</text></view>
+          </view>
+        </picker>
+
+        <view class="row row-last">
+          <text class="row-k">总价</text>
+          <view class="row-v price-input-wrap">
+            <input
+              class="price-input"
+              type="digit"
+              placeholder="____"
+              placeholder-class="price-ph"
+              maxlength="6"
+              value="{{totalPrice}}"
+              bindinput="onPriceInput"
+            />
+            <text class="price-yuan">¥</text>
+          </view>
+        </view>
+
+      </view>
+
+      <view class="group-title">备注</view>
+      <view class="group">
+        <view class="note-wrap">
+          <textarea
+            class="note-input"
+            placeholder="例如：走高速，后备箱可放两个行李箱"
+            placeholder-class="note-ph"
+            maxlength="100"
+            value="{{note}}"
+            bindinput="onNoteInput"
+          />
+          <view class="note-count">{{note.length}}/100</view>
+        </view>
+      </view>
+
+      <view class="notice">
+        发布后所有用户可见。请勿在备注中填写手机号、微信号等联系方式。
+      </view>
+
+      <view class="submit">
+        <button class="btn" bindtap="onSubmit">发布行程</button>
+      </view>
+
+    </block>
+
+  </view>
+
+</view>

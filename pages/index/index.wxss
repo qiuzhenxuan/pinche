@@ -1,0 +1,608 @@
+.page {
+  min-height: 100vh;
+  background: #F2F2F7;
+}
+
+/* 固定头部：状态栏 + 大标题。用半透明材质，内容从下方滚过时被模糊，
+   层级交给材质本身，而不是在底下压一条 1rpx 硬分割线 */
+.nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 10;
+  background: rgba(242, 242, 247, 0.86);
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  padding-left: 16px;
+  padding-right: 16px;
+}
+
+/* 滚动边缘：只在浮动头部与内容交界处做一小段渐隐 */
+.nav::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 100%;
+  height: 14px;
+  background: linear-gradient(180deg, rgba(242, 242, 247, 0.9), rgba(242, 242, 247, 0));
+  pointer-events: none;
+}
+
+.nav-inner {
+  height: 64px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.nav-title {
+  font-size: 34px;
+  font-weight: 700;
+  line-height: 41px;
+  letter-spacing: 0.37px;
+  color: #000000;
+}
+
+.nav-sub {
+  font-size: 13px;
+  color: #8E8E93;
+  margin-top: 1px;
+}
+
+/* 城市切换：当前城市 + 条数。定位会自动写进来，也可以点开城市页改。
+   它是列向 flex 的子项，不设 align-self 会被拉满整行 */
+.city-chip {
+  align-self: flex-start;
+  display: inline-flex;
+  align-items: center;
+  height: 22px;
+  padding: 0 10px 0 9px;
+  font-size: 13px;
+  background: rgba(120, 120, 128, 0.12);
+  border-radius: 999px;
+  transition: opacity 160ms ease-out;
+}
+
+/* 城市胶囊左侧的圆点：所在城市有可拼行程 → 绿，没有 → 红。
+   行程数还没回来时保持中性的蓝，避免一进页面先报一片红 */
+.city-dot {
+  width: 6px;
+  height: 6px;
+  margin-right: 5px;
+  border-radius: 50%;
+  background: #007AFF;
+  transition: background-color 220ms ease-out;
+}
+
+.city-dot-on {
+  background: #34C759;
+}
+
+.city-dot-off {
+  background: #FF3B30;
+}
+
+.city-name {
+  font-weight: 600;
+  color: #000000;
+}
+
+.city-caret {
+  margin-left: 3px;
+  font-size: 10px;
+  color: #8E8E93;
+}
+
+.city-count {
+  margin-left: 8px;
+  padding-left: 8px;
+  border-left: 1rpx solid rgba(60, 60, 67, 0.2);
+  color: #8E8E93;
+}
+
+/* 线路筛选 */
+.chips {
+  width: 100%;
+  white-space: nowrap;
+  padding: 12px 0 4px;
+}
+
+.chips-inner {
+  display: inline-block;
+  padding: 0 16px;
+}
+
+.chip {
+  display: inline-block;
+  padding: 8px 16px;
+  margin-right: 8px;
+  font-size: 15px;
+  line-height: 1.2;
+  color: #3C3C43;
+  background: #FFFFFF;
+  border-radius: 999px;
+  /* 选中时颜色渐变过去，不做硬切 */
+  transition: background-color 220ms cubic-bezier(0.32, 0.72, 0, 1),
+    color 220ms cubic-bezier(0.32, 0.72, 0, 1),
+    transform 110ms ease-out;
+}
+
+.chip-on {
+  color: #FFFFFF;
+  background: #007AFF;
+  font-weight: 500;
+}
+
+/* 行程卡片：苹果小组件风格 */
+.list {
+  padding: 12px 16px 0;
+  /* 列表首次出现时轻微上浮淡入。wx:if 建节点时触发一次，
+     切线路时节点不重建，所以从详情页返回不会反复重放 */
+  animation: list-in 320ms cubic-bezier(0.32, 0.72, 0, 1) both;
+}
+
+@keyframes list-in {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.card {
+  background: #FFFFFF;
+  border-radius: 22px;
+  padding: 14px 16px 12px;
+  margin-bottom: 14px;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.06);
+  transition: transform 110ms ease-out;
+}
+
+.card-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+.when-wrap {
+  display: flex;
+  align-items: center;
+  min-width: 0;
+}
+
+.when {
+  font-size: 14px;
+  font-weight: 600;
+  color: #3C3C43;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* 出发日还很远时的醒目提示。
+   日期默认只写「X月X日」，跨月之后很容易被误读成近期，所以额外标出还有多久。 */
+.far-badge {
+  flex-shrink: 0;
+  margin-left: 6px;
+  font-size: 11px;
+  font-weight: 600;
+  color: #B25000;
+  background: rgba(255, 149, 0, 0.18);
+  padding: 2px 7px;
+  border-radius: 999px;
+}
+
+.seat {
+  flex-shrink: 0;
+  margin-left: 10px;
+  font-size: 12px;
+  font-weight: 600;
+  color: #007AFF;
+  background: rgba(0, 122, 255, 0.1);
+  padding: 3px 10px;
+  border-radius: 999px;
+}
+
+.seat-low {
+  color: #FF9500;
+  background: rgba(255, 149, 0, 0.14);
+}
+
+/* 路线条：浅浅的灰 + 玻璃描边（不用 filter，保证文字锐利） */
+.island {
+  display: flex;
+  align-items: center;
+  background: rgba(120, 120, 128, 0.1);
+  border-radius: 16px;
+  padding: 12px 13px;
+  box-shadow: inset 0 0 0 1rpx rgba(255, 255, 255, 0.8);
+}
+
+.island-point {
+  flex: 1;
+  min-width: 0;
+  text-align: center;
+  font-size: 13px;
+  font-weight: 600;
+  color: #1C1C1E;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* 12306 风格的醒目箭头 */
+.route-arrow {
+  position: relative;
+  width: 32px;
+  height: 12px;
+  flex-shrink: 0;
+  margin: 0 7px;
+}
+
+.route-arrow-bar {
+  position: absolute;
+  left: 0;
+  top: 50%;
+  margin-top: -1.5px;
+  width: 25px;
+  height: 3px;
+  border-radius: 2px;
+  background: linear-gradient(90deg, #0A84FF, #0060DF);
+}
+
+.route-arrow-tip {
+  position: absolute;
+  right: 0;
+  top: 50%;
+  margin-top: -5.5px;
+  width: 0;
+  height: 0;
+  border-top: 5.5px solid transparent;
+  border-bottom: 5.5px solid transparent;
+  border-left: 7px solid #0A84FF;
+}
+
+.card-note {
+  font-size: 13px;
+  color: #8E8E93;
+  line-height: 1.45;
+  margin-top: 10px;
+}
+
+.hr {
+  height: 1rpx;
+  background: rgba(60, 60, 67, 0.14);
+  margin: 12px 0 10px;
+}
+
+.card-foot {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+}
+
+.owner {
+  display: flex;
+  align-items: center;
+  min-width: 0;
+  padding-bottom: 2px;
+}
+
+.owner-name {
+  font-size: 14px;
+  line-height: 18px;
+  color: #3C3C43;
+}
+
+/* 车上男女构成 */
+.gender {
+  display: inline-flex;
+  align-items: center;
+  flex-shrink: 0;
+  height: 18px;
+  margin-left: 6px;
+  padding: 0 8px;
+  font-size: 11px;
+  line-height: 1;
+  color: #8E8E93;
+  background: rgba(120, 120, 128, 0.12);
+  border-radius: 4px;
+}
+
+/* 性别要求角标（不限时不显示） */
+.gl {
+  display: inline-flex;
+  align-items: center;
+  flex-shrink: 0;
+  height: 18px;
+  margin-left: 6px;
+  padding: 0 8px;
+  font-size: 11px;
+  line-height: 1;
+  color: #C77700;
+  background: rgba(255, 149, 0, 0.14);
+  border-radius: 4px;
+}
+
+/* 价格：人均为主，总价为辅 */
+.price-block {
+  flex-shrink: 0;
+  text-align: right;
+}
+
+.price-per {
+  display: flex;
+  align-items: baseline;
+  justify-content: flex-end;
+}
+
+.per-label {
+  font-size: 11px;
+  color: #8E8E93;
+  margin-right: 3px;
+}
+
+.per-num {
+  font-size: 21px;
+  font-weight: 700;
+  color: #007AFF;
+  letter-spacing: -0.3px;
+}
+
+.price-total {
+  font-size: 12px;
+  color: #8E8E93;
+  margin-top: 1px;
+}
+
+/* 空状态 */
+.empty {
+  padding: 80px 32px 0;
+  text-align: center;
+}
+
+.empty-title {
+  font-size: 16px;
+  color: #3C3C43;
+}
+
+.empty-desc {
+  font-size: 14px;
+  color: #8E8E93;
+  margin-top: 6px;
+}
+
+.loading {
+  text-align: center;
+  font-size: 13px;
+  color: #8E8E93;
+  padding: 20px 0;
+}
+
+.no-more {
+  text-align: center;
+  font-size: 13px;
+  color: #C7C7CC;
+  padding: 20px 0 4px;
+}
+
+.foot-tip {
+  text-align: center;
+  font-size: 12px;
+  color: #C7C7CC;
+  padding: 16px 0 28px;
+}
+
+.foot-mode {
+  margin-top: 4px;
+  font-size: 11px;
+  color: #D6D6DB;
+}
+
+/* 未登录时的引导面板 */
+.gate {
+  margin: 24px 16px 0;
+  padding: 28px 20px 24px;
+  background: #FFFFFF;
+  border-radius: 16px;
+}
+
+.gate-title {
+  font-size: 18px;
+  font-weight: 600;
+  color: #000000;
+  text-align: center;
+}
+
+.gate-desc {
+  margin: 10px 0 20px;
+  font-size: 13px;
+  line-height: 1.6;
+  color: #8E8E93;
+}
+
+/* ---------------- 深色模式 ---------------- */
+@media (prefers-color-scheme: dark) {
+  .page {
+    background: #000000;
+  }
+
+  .nav {
+    background: rgba(0, 0, 0, 0.72);
+  }
+
+  .nav::after {
+    background: linear-gradient(180deg, rgba(0, 0, 0, 0.85), rgba(0, 0, 0, 0));
+  }
+
+  .nav-title {
+    color: #FFFFFF;
+  }
+
+  .chip {
+    color: #EBEBF5;
+    background: #1C1C1E;
+  }
+
+  .chip-on {
+    color: #FFFFFF;
+    background: #0A84FF;
+  }
+
+  .card {
+    background: #1C1C1E;
+    box-shadow: 0 8px 22px rgba(0, 0, 0, 0.5);
+  }
+
+  .when {
+    color: #EBEBF5;
+  }
+
+  .seat {
+    color: #5AA9FF;
+    background: rgba(10, 132, 255, 0.24);
+  }
+
+  .seat-low {
+    color: #FFB340;
+    background: rgba(255, 149, 0, 0.24);
+  }
+
+  .island {
+    background: rgba(120, 120, 128, 0.24);
+    box-shadow: inset 0 0 0 1rpx rgba(255, 255, 255, 0.08);
+  }
+
+  .island-point {
+    color: #FFFFFF;
+  }
+
+  .route-arrow-bar {
+    background: linear-gradient(90deg, #5AA9FF, #0A84FF);
+  }
+
+  .card-note {
+    color: #98989F;
+  }
+
+  .hr {
+    background: rgba(255, 255, 255, 0.12);
+  }
+
+  .owner-name {
+    color: #EBEBF5;
+  }
+
+  .gender {
+    color: #98989F;
+    background: rgba(120, 120, 128, 0.24);
+  }
+
+  .gl {
+    color: #FFB340;
+    background: rgba(255, 149, 0, 0.24);
+  }
+
+  .city-chip {
+    background: rgba(120, 120, 128, 0.24);
+  }
+
+  .city-dot-on {
+    background: #30D158;
+  }
+
+  .city-dot-off {
+    background: #FF453A;
+  }
+
+  .city-name {
+    color: #FFFFFF;
+  }
+
+  .city-caret {
+    color: #98989F;
+  }
+
+  .city-count {
+    border-left-color: rgba(255, 255, 255, 0.16);
+    color: #98989F;
+  }
+
+  .per-num {
+    color: #5AA9FF;
+  }
+
+  .per-label,
+  .price-total {
+    color: #98989F;
+  }
+
+  .empty-title {
+    color: #EBEBF5;
+  }
+
+  .no-more,
+  .foot-tip {
+    color: #6C6C70;
+  }
+
+  .foot-mode {
+    color: #5A5A5E;
+  }
+
+  .far-badge {
+    color: #FFB340;
+    background: rgba(255, 149, 0, 0.24);
+  }
+
+  .gate {
+    background: #1C1C1E;
+  }
+
+  .gate-title {
+    color: #FFFFFF;
+  }
+
+  .gate-desc {
+    color: #98989F;
+  }
+}
+
+/* ---------------- 降低动效 ---------------- */
+@media (prefers-reduced-motion: reduce) {
+  .list {
+    animation: none;
+  }
+
+  .card,
+  .chip {
+    transition: none;
+  }
+}
+
+/* ---------------- 降低透明度 ----------------
+   系统开了「降低透明度」就把毛玻璃换成实底：可读性优先于材质感。 */
+@media (prefers-reduced-transparency: reduce) {
+  .nav {
+    background: #F2F2F7;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+  }
+
+  .nav::after {
+    display: none;
+  }
+}
+
+@media (prefers-reduced-transparency: reduce) and (prefers-color-scheme: dark) {
+  .nav {
+    background: #000000;
+  }
+}

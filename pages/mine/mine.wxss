@@ -1,0 +1,284 @@
+.page {
+  min-height: 100vh;
+  background: #F2F2F7;
+}
+
+.body {
+  padding: 16px 0 32px;
+}
+
+.profile {
+  display: flex;
+  align-items: center;
+  margin: 0 16px 20px;
+  padding: 18px 16px;
+  background: #FFFFFF;
+  border-radius: 12px;
+}
+
+.avatar,
+.avatar-img {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.avatar {
+  background: #007AFF;
+  color: #FFFFFF;
+  font-size: 22px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.avatar-img {
+  background: #E5E5EA;
+}
+
+/* 未登录时的占位头像：灰底 + 人形剪影 */
+.avatar-guest {
+  position: relative;
+  background: #E5E5EA;
+}
+
+.avatar-guest::before {
+  content: '';
+  position: absolute;
+  top: 13px;
+  left: 50%;
+  width: 16px;
+  height: 16px;
+  margin-left: -8px;
+  border-radius: 50%;
+  background: #AEAEB2;
+}
+
+.avatar-guest::after {
+  content: '';
+  position: absolute;
+  bottom: 11px;
+  left: 50%;
+  width: 28px;
+  height: 15px;
+  margin-left: -14px;
+  border-radius: 14px 14px 0 0;
+  background: #AEAEB2;
+}
+
+.profile-main {
+  flex: 1;
+  min-width: 0;
+  margin-left: 14px;
+}
+
+.profile-name {
+  font-size: 20px;
+  font-weight: 600;
+  color: #000000;
+}
+
+.profile-sub {
+  font-size: 13px;
+  color: #8E8E93;
+  margin-top: 3px;
+}
+
+.trip-cell {
+  flex: 1;
+  min-width: 0;
+}
+
+.trip-route {
+  font-size: 16px;
+  color: #000000;
+}
+
+.trip-sub {
+  font-size: 13px;
+  color: #8E8E93;
+  margin-top: 3px;
+}
+
+/* 列表项：路线一行铺平，时间与状态放第二行 */
+.item {
+  padding: 13px 16px 11px;
+  border-bottom: 1rpx solid rgba(60, 60, 67, 0.18);
+}
+
+.item-last {
+  border-bottom: none;
+}
+
+.route {
+  display: flex;
+  align-items: center;
+}
+
+.route-point {
+  flex: 1;
+  min-width: 0;
+  text-align: center;
+  font-size: 15px;
+  font-weight: 600;
+  color: #1C1C1E;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* 与拼车页一致的 12306 风格箭头 */
+.route-arrow {
+  position: relative;
+  width: 34px;
+  height: 12px;
+  flex-shrink: 0;
+  margin: 0 8px;
+}
+
+.route-arrow-bar {
+  position: absolute;
+  left: 0;
+  top: 50%;
+  margin-top: -1.5px;
+  width: 26px;
+  height: 3px;
+  border-radius: 2px;
+  background: linear-gradient(90deg, #0A84FF, #0060DF);
+}
+
+.route-arrow-tip {
+  position: absolute;
+  right: 0;
+  top: 50%;
+  margin-top: -5.5px;
+  width: 0;
+  height: 0;
+  border-top: 5.5px solid transparent;
+  border-bottom: 5.5px solid transparent;
+  border-left: 7px solid #0A84FF;
+}
+
+.item-foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 8px;
+}
+
+.item-sub {
+  flex: 1;
+  min-width: 0;
+  font-size: 13px;
+  color: #8E8E93;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.item-state {
+  flex-shrink: 0;
+  margin-left: 10px;
+  font-size: 13px;
+  color: #8E8E93;
+}
+
+.item-off {
+  color: #C7C7CC;
+}
+
+.join-on {
+  color: #007AFF;
+  font-weight: 500;
+}
+
+.chev {
+  margin-left: 6px;
+  color: #C7C7CC;
+  font-size: 18px;
+  line-height: 1;
+}
+
+.pick {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+.foot-tip {
+  text-align: center;
+  font-size: 12px;
+  color: #C7C7CC;
+  padding: 16px 0 8px;
+}
+
+/* 退出登录：单行居中红字，与设置组同款卡片，不额外做按钮样式 */
+.logout-row {
+  justify-content: center;
+  font-size: 16px;
+  color: #FF3B30;
+}
+
+/* ---------------- 深色模式 ---------------- */
+@media (prefers-color-scheme: dark) {
+  .page {
+    background: #000000;
+  }
+
+  .profile {
+    background: #1C1C1E;
+  }
+
+  .avatar {
+    background: #0A84FF;
+  }
+
+  .avatar-img {
+    background: #2C2C2E;
+  }
+
+  .avatar-guest {
+    background: #2C2C2E;
+  }
+
+  .avatar-guest::before,
+  .avatar-guest::after {
+    background: #5A5A5E;
+  }
+
+  .profile-name,
+  .trip-route,
+  .route-point {
+    color: #FFFFFF;
+  }
+
+  .item {
+    border-bottom-color: rgba(255, 255, 255, 0.12);
+  }
+
+  .route-arrow-bar {
+    background: linear-gradient(90deg, #5AA9FF, #0A84FF);
+  }
+
+  .join-on {
+    color: #0A84FF;
+  }
+
+  .item-off {
+    color: #6C6C70;
+  }
+
+  .chev {
+    color: #5A5A5E;
+  }
+
+  .foot-tip {
+    color: #6C6C70;
+  }
+
+  .logout-row {
+    color: #FF453A;
+  }
+}

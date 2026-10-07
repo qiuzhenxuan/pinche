@@ -1,0 +1,307 @@
+.page {
+  height: 100vh;
+  background: #F2F2F7;
+  overflow: hidden;
+}
+
+/* 顶部导航：半透明材质，内容从下方滚过时被模糊。
+   层级交给材质本身，而不是在底下压一条 1rpx 硬分割线 */
+.head {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 20;
+  background: rgba(242, 242, 247, 0.86);
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+}
+
+/* 滚动边缘：只在浮动导航与内容交界处做一小段渐隐 */
+.head::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 100%;
+  height: 14px;
+  background: linear-gradient(180deg, rgba(242, 242, 247, 0.9), rgba(242, 242, 247, 0));
+  pointer-events: none;
+}
+
+.head-bar {
+  position: relative;
+  height: 44px;
+  display: flex;
+  align-items: center;
+}
+
+/* 返回键的点击区铺满 44×44，视觉只有一枚箭头 */
+.back {
+  width: 44px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: opacity 160ms ease-out;
+}
+
+/* 箭头用两条边拼出来，比字符更锐利、粗细可控 */
+.chev {
+  width: 11px;
+  height: 11px;
+  margin-left: 4px;
+  border-top: 2px solid #007AFF;
+  border-right: 2px solid #007AFF;
+  transform: rotate(-135deg);
+}
+
+.head-title {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 17px;
+  font-weight: 600;
+  color: #000000;
+}
+
+/* 内容区整体压在导航条下方 */
+.sheet {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+}
+
+.sheet-inner {
+  padding: 8px 0 calc(40px + env(safe-area-inset-bottom));
+}
+
+/* 分组标题吸顶：滚到哪一段，标题就停在导航条下沿 */
+.sec-head {
+  position: sticky;
+  top: 0;
+  z-index: 5;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 30px;
+  padding: 0 20px 0 16px;
+  background: rgba(242, 242, 247, 0.92);
+  backdrop-filter: blur(12px) saturate(180%);
+  -webkit-backdrop-filter: blur(12px) saturate(180%);
+}
+
+.sec-title {
+  font-size: 13px;
+  letter-spacing: 0.5px;
+  color: #8E8E93;
+}
+
+.sec-act {
+  padding: 4px 6px;
+  margin-right: -6px;
+  border-radius: 6px;
+  font-size: 13px;
+  color: #007AFF;
+  transition: opacity 160ms ease-out;
+}
+
+.sec-act-off {
+  color: #C7C7CC;
+}
+
+.row-main {
+  display: flex;
+  align-items: center;
+  min-width: 0;
+}
+
+.city-name {
+  font-size: 17px;
+  min-width: 0;
+  color: #000000;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.check {
+  font-size: 17px;
+  font-weight: 600;
+  color: #007AFF;
+}
+
+.foot {
+  padding: 8px 24px 0;
+}
+
+.foot-note {
+  font-size: 12px;
+  line-height: 1.6;
+  color: #C7C7CC;
+  text-align: center;
+}
+
+/* 右侧字母索引：贴右边缘、垂直居中 */
+.index {
+  position: fixed;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 20;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 6px 6px 6px 10px;
+}
+
+.index-i {
+  font-size: 11px;
+  line-height: 1;
+  padding: 1.6px 0;
+  color: #007AFF;
+  transition: color 120ms ease-out;
+}
+
+.index-i-on {
+  color: #000000;
+  font-weight: 700;
+}
+
+/* 拖动索引时浮出的字母：一块真正的「材质」，而不是普通文字。
+   用 margin 做居中，把 transform 留给缩放，两者互不打架 */
+.index-tip {
+  position: fixed;
+  left: 50%;
+  top: 50%;
+  z-index: 30;
+  width: 68px;
+  height: 68px;
+  margin: -34px 0 0 -34px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 18px;
+  font-size: 32px;
+  font-weight: 600;
+  color: #000000;
+  background: rgba(255, 255, 255, 0.92);
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.18);
+  opacity: 0;
+  transform: scale(0.86);
+  transition: opacity 160ms ease-out, transform 220ms cubic-bezier(0.32, 0.72, 0, 1);
+  pointer-events: none;
+}
+
+.index-tip-on {
+  opacity: 1;
+  transform: scale(1);
+}
+
+/* ---------------- 深色模式 ---------------- */
+@media (prefers-color-scheme: dark) {
+  .page {
+    background: #000000;
+  }
+
+  .head {
+    background: rgba(0, 0, 0, 0.72);
+  }
+
+  .head::after {
+    background: linear-gradient(180deg, rgba(0, 0, 0, 0.85), rgba(0, 0, 0, 0));
+  }
+
+  .head-title {
+    color: #FFFFFF;
+  }
+
+  .chev {
+    border-color: #0A84FF;
+  }
+
+  .sec-head {
+    background: rgba(0, 0, 0, 0.9);
+  }
+
+  .sec-act-off {
+    color: #48484A;
+  }
+
+  .city-name {
+    color: #FFFFFF;
+  }
+
+  .check {
+    color: #0A84FF;
+  }
+
+  .foot-note {
+    color: #6C6C70;
+  }
+
+  .index-i {
+    color: #0A84FF;
+  }
+
+  .index-i-on {
+    color: #FFFFFF;
+  }
+
+  .index-tip {
+    color: #FFFFFF;
+    background: rgba(44, 44, 46, 0.94);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
+  }
+}
+
+/* ---------------- 降低动效 ----------------
+   去掉缩放和颜色过渡，保留透明度变化：状态照样看得懂，但不晃。 */
+@media (prefers-reduced-motion: reduce) {
+  .index-tip,
+  .index-tip-on {
+    transform: none;
+    transition: opacity 200ms ease;
+  }
+
+  .back,
+  .sec-act,
+  .index-i {
+    transition: none;
+  }
+}
+
+/* ---------------- 降低透明度 ----------------
+   系统开了「降低透明度」就把毛玻璃换成实底：可读性优先于材质感。 */
+@media (prefers-reduced-transparency: reduce) {
+  .head,
+  .sec-head {
+    background: #F2F2F7;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+  }
+
+  .head::after {
+    display: none;
+  }
+
+  .index-tip {
+    background: #FFFFFF;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+  }
+}
+
+@media (prefers-reduced-transparency: reduce) and (prefers-color-scheme: dark) {
+  .head,
+  .sec-head {
+    background: #000000;
+  }
+
+  .index-tip {
+    background: #1C1C1E;
+  }
+}

@@ -1,0 +1,149 @@
+<view class="page">
+
+  <view class="body page-in">
+
+    <block wx:if="{{loggedIn}}">
+
+    <view class="profile" hover-class="hv-card" hover-start-time="0" hover-stay-time="100" bindtap="onGoProfile">
+      <image wx:if="{{me.avatarUrl}}" class="avatar-img" src="{{me.avatarUrl}}" mode="aspectFill"></image>
+      <view wx:else class="avatar">{{avatarText}}</view>
+      <view class="profile-main">
+        <view class="profile-name">{{me.displayName}}</view>
+        <view class="profile-sub">{{subText}}</view>
+      </view>
+      <text class="chev">›</text>
+    </view>
+
+    <view class="group-title">我的发布（{{tripCount}}）</view>
+
+    <view class="group" wx:if="{{tripCount > 0}}">
+      <view
+        class="item {{index === myTrips.length - 1 ? 'item-last' : ''}}"
+        wx:for="{{myTrips}}"
+        wx:key="id"
+        data-id="{{item.id}}"
+        hover-class="hv-row"
+        hover-start-time="0"
+        hover-stay-time="100"
+        bindtap="onOpenDetail"
+      >
+        <view class="route">
+          <text class="route-point">{{item.from}}</text>
+          <view class="route-arrow">
+            <view class="route-arrow-bar"></view>
+            <view class="route-arrow-tip"></view>
+          </view>
+          <text class="route-point">{{item.to}}</text>
+        </view>
+        <view class="item-foot">
+          <text class="item-sub">{{item.dateLabel}} · {{item.time}}</text>
+          <text class="item-state {{item.expired ? 'item-off' : ''}}">{{item.stateText}}</text>
+        </view>
+      </view>
+    </view>
+
+    <view class="group" wx:else>
+      <view class="row row-last" hover-class="hv-row" hover-start-time="0" hover-stay-time="100" bindtap="onGoPublish">
+        <view class="row-k trip-cell">
+          <view class="trip-route">还没有发布过行程</view>
+          <view class="trip-sub">点这里去发布一条</view>
+        </view>
+        <text class="chev">›</text>
+      </view>
+    </view>
+
+    <view class="group-title">我报名的（{{joinCount}}）</view>
+
+    <view class="group" wx:if="{{joinCount > 0}}">
+      <view
+        class="item {{index === myJoins.length - 1 ? 'item-last' : ''}}"
+        wx:for="{{myJoins}}"
+        wx:key="id"
+        data-id="{{item.id}}"
+        hover-class="hv-row"
+        hover-start-time="0"
+        hover-stay-time="100"
+        bindtap="onOpenDetail"
+      >
+        <view class="route">
+          <text class="route-point">{{item.from}}</text>
+          <view class="route-arrow">
+            <view class="route-arrow-bar"></view>
+            <view class="route-arrow-tip"></view>
+          </view>
+          <text class="route-point">{{item.to}}</text>
+        </view>
+        <view class="item-foot">
+          <text class="item-sub">{{item.dateLabel}} · {{item.time}} · {{item.owner}}</text>
+          <text class="item-state {{item.myJoinStatus === 'approved' && !item.expired ? 'join-on' : ''}}{{item.expired ? ' item-off' : ''}}">{{item.expired ? '已结束' : item.myJoinStatusText}}</text>
+        </view>
+      </view>
+    </view>
+
+    <view class="group" wx:else>
+      <view class="row row-last">
+        <view class="row-k trip-cell">
+          <view class="trip-route">还没有报名过行程</view>
+          <view class="trip-sub">去拼车页看看同路的同学</view>
+        </view>
+      </view>
+    </view>
+
+    </block>
+
+    <view class="profile profile-guest" hover-class="hv-card" hover-start-time="0" hover-stay-time="100" wx:else bindtap="onGoLogin">
+      <view class="avatar avatar-guest"></view>
+      <view class="profile-main">
+        <view class="profile-name">点击登录</view>
+        <view class="profile-sub">登录后才能发布行程、报名拼车</view>
+      </view>
+      <text class="chev">›</text>
+    </view>
+
+    <view class="group-title">设置</view>
+    <view class="group">
+      <view class="row" hover-class="hv-row" hover-start-time="0" hover-stay-time="100" bindtap="onGoProfile">
+        <text class="row-k">个人资料</text>
+        <view class="row-v pick">{{loggedIn ? '已填写' : '未填写'}}<text class="chev">›</text></view>
+      </view>
+      <view class="row" hover-class="hv-row" hover-start-time="0" hover-stay-time="100" bindtap="onGoVerify">
+        <text class="row-k">学生认证</text>
+        <view class="row-v pick">{{verifyText}}<text class="chev">›</text></view>
+      </view>
+      <view class="row" hover-class="hv-row" hover-start-time="0" hover-stay-time="100" bindtap="onTip">
+        <text class="row-k">我的消息</text>
+        <view class="row-v pick"><text class="chev">›</text></view>
+      </view>
+      <view class="row" hover-class="hv-row" hover-start-time="0" hover-stay-time="100" bindtap="onGoBlocks">
+        <text class="row-k">黑名单</text>
+        <view class="row-v pick"><text class="chev">›</text></view>
+      </view>
+      <view class="row" hover-class="hv-row" hover-start-time="0" hover-stay-time="100" bindtap="onGoAgreement">
+        <text class="row-k">用户协议</text>
+        <view class="row-v pick"><text class="chev">›</text></view>
+      </view>
+      <view class="row" hover-class="hv-row" hover-start-time="0" hover-stay-time="100" bindtap="onGoPrivacy">
+        <text class="row-k">隐私政策</text>
+        <view class="row-v pick"><text class="chev">›</text></view>
+      </view>
+      <view class="row row-last" hover-class="hv-row" hover-start-time="0" hover-stay-time="100" bindtap="onTip">
+        <text class="row-k">关于</text>
+        <view class="row-v pick">v0.1.0<text class="chev">›</text></view>
+      </view>
+    </view>
+
+    <view class="group" wx:if="{{loggedIn}}">
+      <view
+        class="row row-last logout-row"
+        hover-class="hv-row"
+        hover-start-time="0"
+        hover-stay-time="100"
+        bindtap="onLogout"
+      >退出登录</view>
+    </view>
+
+    <view class="foot-tip">本平台仅提供信息对接，不收取任何费用</view>
+
+  </view>
+
+</view>

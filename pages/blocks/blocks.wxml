@@ -1,0 +1,48 @@
+<view class="page">
+
+  <view class="body page-in">
+
+    <view class="hint">拉黑后你们互相看不到对方的行程，也不能再申请对方发布的车。# 后面是对方的账号标识，用来区分同姓用户。</view>
+
+    <view class="group" wx:if="{{blocks.length > 0}}">
+      <view
+        class="row {{index === blocks.length - 1 ? 'row-last' : ''}}"
+        hover-class="hv-row"
+        hover-start-time="0"
+        hover-stay-time="80"
+        wx:for="{{blocks}}"
+        wx:key="id"
+      >
+        <view class="user-cell">
+          <view class="user-line">
+            <text class="user-name">{{item.name}}</text>
+            <text class="uid-pill" wx:if="{{item.uid}}">#{{item.uid}}</text>
+          </view>
+          <text
+            class="user-sub"
+            wx:for="{{item.subs}}"
+            wx:for-item="sub"
+            wx:key="*this"
+          >{{sub}}</text>
+        </view>
+        <view
+          class="op"
+          hover-class="hv-dim"
+          hover-start-time="0"
+          hover-stay-time="80"
+          catchtap="onUnblock"
+          data-id="{{item.id}}"
+          data-name="{{item.name}}"
+        >解除</view>
+      </view>
+    </view>
+
+    <view class="group" wx:elif="{{loaded}}">
+      <view class="row row-last">
+        <text class="row-v empty-v">黑名单是空的</text>
+      </view>
+    </view>
+
+  </view>
+
+</view>

@@ -1,0 +1,112 @@
+<view class="page">
+
+  <view class="nav" style="padding-top:{{statusBarHeight}}px">
+    <view class="nav-inner">
+      <view class="nav-title">拼车</view>
+      <view
+        wx:if="{{loggedIn}}"
+        class="city-chip"
+        hover-class="hv-dim"
+        hover-start-time="0"
+        hover-stay-time="80"
+        bindtap="onOpenCity"
+      >
+        <text class="city-dot {{cityDot}}"></text>
+        <text class="city-name">{{city}}</text>
+        <text class="city-caret">▾</text>
+        <text class="city-count">共 {{trips.length}} 条</text>
+      </view>
+      <view class="nav-sub" wx:else>登录后查看同路同学</view>
+    </view>
+  </view>
+
+  <view class="body" style="padding-top:{{bodyTop}}px">
+
+    <block wx:if="{{loggedIn}}">
+    <scroll-view wx:if="{{linesOn}}" class="chips" scroll-x="{{true}}" enhanced="{{true}}" show-scrollbar="{{false}}">
+      <view class="chips-inner">
+        <view
+          class="chip {{activeLine === item.id ? 'chip-on' : ''}}"
+          wx:for="{{lines}}"
+          wx:key="id"
+          data-key="{{item.id}}"
+          hover-class="hv-scale"
+          hover-start-time="0"
+          hover-stay-time="100"
+          bindtap="onSelectLine"
+        >{{item.label}}</view>
+      </view>
+    </scroll-view>
+
+    <view class="list" wx:if="{{trips.length > 0}}">
+      <view
+        class="card"
+        wx:for="{{trips}}"
+        wx:key="id"
+        data-id="{{item.id}}"
+        hover-class="hv-card"
+        hover-start-time="0"
+        hover-stay-time="100"
+        bindtap="onOpenDetail"
+      >
+        <view class="card-top">
+          <view class="when-wrap">
+            <text class="when">{{item.dateLabel}} · {{item.time}} 出发</text>
+            <text class="far-badge" wx:if="{{item.far}}">{{item.farText}}</text>
+          </view>
+          <view class="seat {{item.seatsLeft <= 1 ? 'seat-low' : ''}}">剩 {{item.seatsLeft}} 座</view>
+        </view>
+
+        <view class="island">
+          <text class="island-point">{{item.from}}</text>
+          <view class="route-arrow">
+            <view class="route-arrow-bar"></view>
+            <view class="route-arrow-tip"></view>
+          </view>
+          <text class="island-point">{{item.to}}</text>
+        </view>
+
+        <view class="card-note" wx:if="{{item.note}}">{{item.note}}</view>
+
+        <view class="hr"></view>
+
+        <view class="card-foot">
+          <view class="owner">
+            <text class="owner-name">{{item.owner}}</text>
+            <text class="gl" wx:if="{{item.genderLimitText}}">{{item.genderLimitText}}</text>
+            <text class="gender" wx:if="{{item.genderText}}">{{item.genderText}}</text>
+            <text class="tag" wx:if="{{item.verified}}">已认证</text>
+          </view>
+          <view class="price-block">
+            <view class="price-per">
+              <text class="per-label">人均</text>
+              <text class="per-num">{{item.perText}}</text>
+            </view>
+            <view class="price-total">总价 {{item.totalText}}</view>
+          </view>
+        </view>
+      </view>
+    </view>
+
+    <view class="empty" wx:if="{{!loading && trips.length === 0}}">
+      <view class="empty-title">{{city}}暂时没有行程</view>
+      <view class="empty-desc">{{linesOn ? '换个线路看看，或者自己发一条' : '过几天再来看看，或者自己发一条'}}</view>
+    </view>
+
+    <view class="loading" wx:if="{{loading}}">加载中…</view>
+    <view class="no-more" wx:if="{{!loading && trips.length > 0 && !hasMore}}">没有更多了</view>
+    </block>
+
+    <view class="gate" wx:else>
+      <view class="gate-title">登录后查看拼车信息</view>
+      <view class="gate-desc">拼车行程仅对已登录的同学开放，这样双方都能确认对方是本校同学。登录只需要填一个姓，其他同学只会看到「林同学」这样的称呼。</view>
+      <button class="btn" bindtap="onGoLogin">去登录</button>
+    </view>
+
+    <view class="foot-tip">
+      <view>仅提供信息对接，不收取任何费用</view>
+      <view class="foot-mode">{{dataTip}}</view>
+    </view>
+
+  </view>
+</view>

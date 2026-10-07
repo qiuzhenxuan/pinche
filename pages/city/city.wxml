@@ -1,0 +1,105 @@
+<view class="page">
+
+  <view class="head" style="padding-top:{{statusBarHeight}}px">
+    <view class="head-bar">
+      <view
+        class="back"
+        hover-class="hv-dim"
+        hover-start-time="0"
+        hover-stay-time="80"
+        bindtap="onBack"
+      >
+        <view class="chev"></view>
+      </view>
+      <text class="head-title">选择城市</text>
+    </view>
+  </view>
+
+  <scroll-view
+    class="sheet"
+    style="top:{{bodyTop}}px"
+    scroll-y="{{true}}"
+    scroll-into-view="{{toView}}"
+    scroll-with-animation="{{true}}"
+  >
+    <view class="sheet-inner">
+
+      <view class="sec" id="sec-locate" wx:if="{{locateOn}}">
+        <view class="sec-head">
+          <text class="sec-title">当前定位</text>
+          <text
+            class="sec-act {{locating ? 'sec-act-off' : ''}}"
+            hover-class="hv-dim"
+            hover-start-time="0"
+            hover-stay-time="80"
+            catchtap="onRelocate"
+          >{{locating ? '定位中…' : '重新定位'}}</text>
+        </view>
+        <view class="group">
+          <view
+            class="row row-last"
+            hover-class="hv-row"
+            hover-start-time="0"
+            hover-stay-time="80"
+            data-city="{{located}}"
+            bindtap="onPick"
+          >
+            <view class="row-main">
+              <text class="city-name">{{located}}</text>
+            </view>
+            <text class="check" wx:if="{{!locating && located === current}}">✓</text>
+          </view>
+        </view>
+      </view>
+
+      <view
+        class="sec"
+        wx:for="{{groups}}"
+        wx:for-item="group"
+        wx:for-index="gi"
+        wx:key="letter"
+        id="sec-{{group.letter}}"
+      >
+        <view class="sec-head">
+          <text class="sec-title">{{group.letter}}</text>
+        </view>
+        <view class="group">
+          <view
+            class="row {{ci === group.cities.length - 1 ? 'row-last' : ''}}"
+            hover-class="hv-row"
+            hover-start-time="0"
+            hover-stay-time="80"
+            wx:for="{{group.cities}}"
+            wx:for-item="city"
+            wx:for-index="ci"
+            wx:key="name"
+            data-city="{{city.name}}"
+            bindtap="onPick"
+          >
+            <view class="row-main">
+              <text class="city-name">{{city.name}}</text>
+            </view>
+            <text class="check" wx:if="{{city.name === current}}">✓</text>
+          </view>
+        </view>
+      </view>
+
+      <view class="foot">
+        <view class="foot-note" wx:if="{{locateOn}}">已收录 {{total}} 个城市。定位会自动识别你所在的城市，不在列表里也能用。</view>
+        <view class="foot-note" wx:else>已收录 {{total}} 个城市，点一下即可切换。</view>
+      </view>
+
+    </view>
+  </scroll-view>
+
+  <view class="index" catchtouchstart="onIndexTouch" catchtouchmove="onIndexTouch">
+    <text
+      class="index-i {{activeLetter === item ? 'index-i-on' : ''}}"
+      wx:for="{{indexLetters}}"
+      wx:key="*this"
+    >{{item}}</text>
+  </view>
+
+  <view class="index-tip {{tipOn ? 'index-tip-on' : ''}}">{{activeLetter}}</view>
+
+</view>

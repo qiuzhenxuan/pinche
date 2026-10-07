@@ -1,0 +1,104 @@
+<view class="page">
+
+  <view class="body page-in">
+
+    <view class="gate" wx:if="{{needProfile}}">
+      <view class="gate-title">先完善一下资料</view>
+      <view class="gate-desc">学生认证前需要先填一个姓，其他同学只会看到「林同学」这样的称呼，不会知道你的全名。</view>
+      <button class="btn" bindtap="onGoLogin">去完善资料</button>
+    </view>
+
+    <view class="status-card status-{{verifyStatus}}" wx:if="{{!needProfile}}">
+      <view class="status-title">{{statusText}}</view>
+      <view class="status-tip">{{statusTip}}</view>
+      <view class="status-reason" wx:if="{{reason}}">驳回原因：{{reason}}</view>
+    </view>
+
+    <block wx:if="{{!needProfile && (verifyStatus === 'none' || verifyStatus === 'rejected')}}">
+
+      <view class="group-title">认证材料</view>
+      <view class="group">
+        <view class="row">
+          <text class="row-k">材料类型</text>
+          <view class="row-v seg">
+            <view
+              class="seg-item {{type === 'chsi' ? 'seg-on' : ''}}"
+              data-t="chsi"
+              hover-class="hv-scale"
+              hover-start-time="0"
+              hover-stay-time="80"
+              bindtap="onPickType"
+            >学信网截图</view>
+            <view
+              class="seg-item {{type === 'studentcard' ? 'seg-on' : ''}}"
+              data-t="studentcard"
+              hover-class="hv-scale"
+              hover-start-time="0"
+              hover-stay-time="80"
+              bindtap="onPickType"
+            >学生证照片</view>
+          </view>
+        </view>
+        <view class="row" wx:if="{{type === 'chsi'}}">
+          <text class="row-k">在线验证码</text>
+          <input
+            class="row-v input"
+            placeholder="选填，有则填便于核验"
+            placeholder-class="ph"
+            value="{{code}}"
+            bindinput="onCodeInput"
+          />
+        </view>
+        <view class="row row-last">
+          <text class="row-k">备注</text>
+          <input
+            class="row-v input"
+            placeholder="选填"
+            placeholder-class="ph"
+            value="{{note}}"
+            bindinput="onNoteInput"
+          />
+        </view>
+      </view>
+
+      <view class="group-title">上传图片</view>
+      <view class="group">
+        <view class="upload" hover-class="hv-card" hover-start-time="0" hover-stay-time="80" bindtap="onPickImage">
+          <image wx:if="{{imagePath}}" class="upload-img" src="{{imagePath}}" mode="aspectFit"></image>
+          <view wx:else class="upload-empty">
+            <view class="upload-plus">＋</view>
+            <view class="upload-text">{{type === 'chsi' ? '上传学信网学籍信息截图' : '上传学生证内页照片'}}</view>
+          </view>
+        </view>
+        <view class="upload-meta" wx:if="{{imagePath}}">{{imageSizeText}} · 点击可重新选择</view>
+        <view class="upload-hint">支持 JPG / PNG，原图不超过 10MB；上传后自动压缩到长边 1600px 以内</view>
+      </view>
+
+      <view class="notice">
+        <view class="notice-title">隐私说明</view>
+        <view class="notice-text">为确保拼车双方都是本校在校学生、保障出行安全，需上传学生证照片或学信网学籍信息截图做人工核验。照片仅用于本次身份核验，核验完成后立即删除，不做任何留存、不对外展示、不用于其他用途。</view>
+        <view class="agree" hover-class="hv-dim" hover-start-time="0" hover-stay-time="80" bindtap="onToggleAgree">
+          <view class="checkbox {{agreed ? 'checkbox-on' : ''}}">
+            <text wx:if="{{agreed}}">✓</text>
+          </view>
+          <text class="agree-text">我已阅读并同意上述说明</text>
+        </view>
+        <view class="agree-links">
+          <text class="link" hover-class="hv-dim" hover-start-time="0" hover-stay-time="80" catchtap="onGoAgreement">《用户协议》</text>
+          <text class="link" hover-class="hv-dim" hover-start-time="0" hover-stay-time="80" catchtap="onGoPrivacy">《隐私政策》</text>
+        </view>
+      </view>
+
+    </block>
+
+  </view>
+
+  <view class="bar" wx:if="{{!needProfile && (verifyStatus === 'none' || verifyStatus === 'rejected')}}">
+    <button
+      class="btn {{canSubmit ? '' : 'btn-off'}}"
+      disabled="{{!canSubmit}}"
+      bindtap="onSubmit"
+    >{{submitting ? '提交中…' : '提交认证'}}</button>
+  </view>
+
+</view>

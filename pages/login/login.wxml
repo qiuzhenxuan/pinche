@@ -1,0 +1,78 @@
+<view class="page">
+
+  <view class="body page-in">
+
+    <view class="hero">
+      <view class="avatar-wrap">
+        <image wx:if="{{avatarUrl}}" class="avatar-img" src="{{avatarUrl}}" mode="aspectFill"></image>
+        <view wx:else class="avatar-ph">
+          <view class="avatar-plus">+</view>
+        </view>
+        <button class="avatar-hit" open-type="chooseAvatar" bindchooseavatar="onChooseAvatar"></button>
+      </view>
+      <view class="hero-title">{{avatarUrl ? '换一张头像' : '选择头像'}}</view>
+      <view class="hero-tip">头像只在你的个人主页展示，不会出现在拼车列表里</view>
+    </view>
+
+    <view class="group">
+      <view class="row">
+        <text class="row-k">你的姓</text>
+        <input
+          class="row-input"
+          type="text"
+          placeholder="如：林（仅限中文）"
+          placeholder-class="ph"
+          cursor-spacing="40"
+          value="{{surname}}"
+          bindinput="onSurnameInput"
+          bindblur="onSurnameBlur"
+        />
+      </view>
+
+      <view class="row row-last">
+        <text class="row-k">性别</text>
+        <view class="seg" wx:if="{{!genderLocked}}">
+          <view
+            class="seg-item {{gender === 'male' ? 'seg-on' : ''}}"
+            data-g="male"
+            hover-class="hv-dim"
+            hover-start-time="0"
+            hover-stay-time="80"
+            bindtap="onPickGender"
+          >男</view>
+          <view
+            class="seg-item {{gender === 'female' ? 'seg-on' : ''}}"
+            data-g="female"
+            hover-class="hv-dim"
+            hover-start-time="0"
+            hover-stay-time="80"
+            bindtap="onPickGender"
+          >女</view>
+        </view>
+        <view class="row-v lock-v" wx:else>{{genderText}} · 已由学生认证锁定</view>
+      </view>
+    </view>
+
+    <view class="hint hint-gender">性别用于「仅限男生 / 仅限女生」的筛选和车上男女构成，其他同学能看到。</view>
+
+    <view class="greet">
+      <text class="greet-word">你好，</text>
+      <text wx:if="{{hasSurname}}" class="greet-name">{{nameText}}</text>
+      <view wx:else class="caret"></view>
+      <text class="greet-word">同学</text>
+    </view>
+
+    <view class="hint {{hasSurname ? '' : 'hint-off'}}">其他同学只会看到「{{preview}}」，不会知道你的全名。</view>
+
+    <view class="actions">
+      <button class="btn {{hasSurname ? '' : 'btn-off'}}" bindtap="onSave">{{btnText}}</button>
+    </view>
+
+    <view class="foot-tip">
+      <view>登录后才能发布行程和申请上车</view>
+      <view>我们只收集你的姓与头像，用于在拼车里标识你的身份</view>
+    </view>
+
+  </view>
+
+</view>

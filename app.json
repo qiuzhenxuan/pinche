@@ -1,0 +1,59 @@
+{
+  "pages": [
+    "pages/index/index",
+    "pages/detail/detail",
+    "pages/publish/publish",
+    "pages/mine/mine",
+    "pages/login/login",
+    "pages/verify/verify",
+    "pages/legal/legal",
+    "pages/blocks/blocks",
+    "pages/city/city"
+  ],
+  "window": {
+    "backgroundTextStyle": "@bgTextStyle",
+    "navigationBarBackgroundColor": "@navBgColor",
+    "navigationBarTitleText": "校园顺风车",
+    "navigationBarTextStyle": "@navTextStyle",
+    "backgroundColor": "@pageBgColor"
+  },
+  "tabBar": {
+    "color": "@tabColor",
+    "selectedColor": "@tabSelectedColor",
+    "backgroundColor": "@tabBgColor",
+    "borderStyle": "@tabBorderStyle",
+    "list": [
+      {
+        "pagePath": "pages/index/index",
+        "text": "拼车",
+        "iconPath": "images/tab-carpool.png",
+        "selectedIconPath": "images/tab-carpool-on.png"
+      },
+      {
+        "pagePath": "pages/publish/publish",
+        "text": "发布",
+        "iconPath": "images/tab-publish.png",
+        "selectedIconPath": "images/tab-publish-on.png"
+      },
+      {
+        "pagePath": "pages/mine/mine",
+        "text": "我的",
+        "iconPath": "images/tab-mine.png",
+        "selectedIconPath": "images/tab-mine-on.png"
+      }
+    ]
+  },
+  "darkmode": true,
+  "themeLocation": "theme.json",
+  "style": "v2",
+  "lazyCodeLoading": "requiredComponents",
+  "sitemapLocation": "sitemap.json",
+  "permission": {
+    "scope.userFuzzyLocation": {
+      "desc": "用于自动识别你所在的城市，为你展示同城的拼车信息"
+    }
+  },
+  "requiredPrivateInfos": [
+    "getFuzzyLocation"
+  ]
+}

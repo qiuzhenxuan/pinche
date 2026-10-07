@@ -1,0 +1,19 @@
+<view class="page">
+  <view class="body">
+
+    <view class="head">
+      <view class="doc-title">{{title}}</view>
+      <view class="doc-updated">{{updated}}</view>
+    </view>
+
+    <view class="intro">{{intro}}</view>
+
+    <view class="sec" wx:for="{{sections}}" wx:key="h">
+      <view class="sec-h">{{item.h}}</view>
+      <view class="sec-p" wx:for="{{item.p}}" wx:for-item="para" wx:key="*this">{{para}}</view>
+    </view>
+
+    <view class="foot-tip">本平台仅提供信息对接，不收取任何费用</view>
+
+  </view>
+</view>

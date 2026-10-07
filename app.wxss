@@ -1,0 +1,221 @@
+/* 全局 iOS 风格基础样式（浅色为默认，深色在文件末尾覆盖） */
+page {
+  background: #F2F2F7;
+  color: #000000;
+  font-size: 17px;
+  font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Helvetica Neue", Helvetica, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+view,
+text,
+input,
+textarea,
+button {
+  box-sizing: border-box;
+}
+
+/* 分组卡片容器 */
+.group {
+  background: #FFFFFF;
+  border-radius: 12px;
+  margin: 0 16px 16px;
+  overflow: hidden;
+}
+
+/* 表单行 */
+.row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 48px;
+  padding: 10px 16px;
+  border-bottom: 1rpx solid rgba(60, 60, 67, 0.18);
+}
+
+.row-last {
+  border-bottom: none;
+}
+
+.row-k {
+  font-size: 16px;
+  color: #000000;
+  flex-shrink: 0;
+  margin-right: 12px;
+}
+
+.row-v {
+  font-size: 16px;
+  color: #8E8E93;
+  text-align: right;
+  flex: 1;
+  min-width: 0;
+}
+
+/* 分组标题 */
+.group-title {
+  font-size: 13px;
+  color: #8E8E93;
+  padding: 0 16px 8px;
+  letter-spacing: 0.4px;
+}
+
+/* 主按钮 */
+.btn {
+  width: 100%;
+  height: 50px;
+  line-height: 50px;
+  padding: 0;
+  border: none;
+  border-radius: 12px;
+  background: #007AFF;
+  color: #FFFFFF;
+  font-size: 17px;
+  font-weight: 600;
+  text-align: center;
+  /* 松手回位走弹簧曲线：起步快、收尾稳，无过冲 */
+  transition: transform 260ms cubic-bezier(0.32, 0.72, 0, 1),
+    background-color 260ms cubic-bezier(0.32, 0.72, 0, 1);
+}
+
+.btn::after {
+  border: none;
+}
+
+/* 按下即响应，不等抬手；回位再交给上面的 260ms */
+.btn:active {
+  background: #0A6CD6;
+  transform: scale(0.97);
+  transition-duration: 90ms;
+}
+
+/* ---------------- 按压反馈（视图类元素） ----------------
+   微信的 :active 在部分安卓 WebView 上不触发，所以视图统一用 hover-class，
+   配合 hover-start-time="0" 做到「按下瞬间就有反馈」。
+   基类上要有 transition，松手时才会有回位动画。 */
+.hv-card {
+  transform: scale(0.985);
+}
+
+.hv-scale {
+  transform: scale(0.96);
+}
+
+.hv-dim {
+  opacity: 0.55;
+}
+
+.hv-row {
+  background: rgba(120, 120, 128, 0.1);
+}
+
+/* ---------------- 内容就位（页面首次呈现） ----------------
+   内容轻微上浮淡入，读起来像「落到位」，而不是硬切出现。
+   关键帧放全局，各页只要加 page-in 类即可复用。
+   用 backwards 而不是 both：结束后回到元素本来的样式，
+   不残留 translateY(0) —— 残留的 transform 会一直占一层合成层，
+   还会给子元素里 position:fixed 的定位埋坑。 */
+.page-in {
+  animation: page-in 320ms cubic-bezier(0.32, 0.72, 0, 1) backwards;
+}
+
+@keyframes page-in {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* 降低动效版的就位：只淡入，不位移 */
+@keyframes page-in-soft {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* 认证标签 */
+.tag {
+  display: inline-flex;
+  align-items: center;
+  height: 18px;
+  padding: 0 8px;
+  font-size: 11px;
+  line-height: 1;
+  color: #34C759;
+  background: rgba(52, 199, 89, 0.12);
+  border-radius: 4px;
+  margin-left: 6px;
+  flex-shrink: 0;
+}
+
+/* ---------------- 深色模式 ---------------- */
+@media (prefers-color-scheme: dark) {
+  page {
+    background: #000000;
+    color: #FFFFFF;
+  }
+
+  .group {
+    background: #1C1C1E;
+  }
+
+  .row {
+    border-bottom-color: rgba(255, 255, 255, 0.12);
+  }
+
+  .row-k {
+    color: #FFFFFF;
+  }
+
+  .row-v {
+    color: #98989F;
+  }
+
+  .group-title {
+    color: #8E8E93;
+  }
+
+  .btn {
+    background: #0A84FF;
+  }
+
+  .btn:active {
+    background: #0060DF;
+  }
+
+  .tag {
+    color: #30D158;
+    background: rgba(48, 209, 88, 0.18);
+  }
+
+  .hv-row {
+    background: rgba(255, 255, 255, 0.1);
+  }
+}
+
+/* ---------------- 降低动效 ----------------
+   开了「减弱动态效果」时不做位移和缩放，只保留有助于理解状态的透明度变化。
+   基础库里若未实现该媒体特性，这段会被整段忽略，不影响默认表现。 */
+@media (prefers-reduced-motion: reduce) {
+  .btn:active {
+    transform: none;
+  }
+
+  .hv-card,
+  .hv-scale {
+    transform: none;
+    opacity: 0.6;
+  }
+
+  /* 去掉位移，只留透明度：状态照样看得懂，但不晃 */
+  .page-in {
+    animation: page-in-soft 200ms ease backwards;
+  }
+}

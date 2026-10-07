@@ -1,0 +1,9 @@
+{
+  "name": "trips",
+  "version": "1.0.0",
+  "description": "行程数据读写：list / detail / mine / add / seed",
+  "main": "index.js",
+  "dependencies": {
+    "wx-server-sdk": "~2.6.3"
+  }
+}
